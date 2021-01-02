@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
+import Layout from "../components/Layout";
 
-export default function Profile() {
+const Profile = () => {
   const isAuthenticated = useIsAuthenticated();
   const { instance, accounts, inProgress } = useMsal();
   const account = useMemo(
@@ -12,12 +13,18 @@ export default function Profile() {
   const [apiData, setApiData] = useState(null);
 
   if (!isAuthenticated || !accounts.length) {
-    return <p>Need to be signed in!</p>;
+    return (
+      <Layout>
+        <p>Need to be signed in!</p>
+      </Layout>
+    );
   }
 
   return (
-    <>
+    <Layout>
       <span>There are currently {accounts.length} users signed in!</span>
-    </>
+    </Layout>
   );
-}
+};
+
+export default Profile;
