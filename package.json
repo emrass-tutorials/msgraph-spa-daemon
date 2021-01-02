@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "msgraph-spa-daemon",
+  "description": "Starter monorepo project with React.js (TS) and an express backend",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "spa": "yarn workspace @msgraph-spa-daemon/spa dev",
+    "daemon": "yarn workspace @msgraph-spa-daemon/daemon start",
+    "start": "concurrently --kill-others-on-fail \"yarn daemon\" \"yarn spa\""
+  },
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^5.3.0"
+  }
+}
