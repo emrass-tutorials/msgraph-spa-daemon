@@ -6,7 +6,8 @@ const LoginButton = () => {
     scopes: ["email", "offline_access", "openid", "profile", "User.Read"],
   };
 
-  const buttonText = inProgress === "login" ? "Logging In ..." : "Log In";
+  const buttonText =
+    inProgress === "login" ? "Logging In ..." : "Log In with Microsoft 365";
 
   return (
     <button

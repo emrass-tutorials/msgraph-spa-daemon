@@ -1,5 +1,5 @@
 import { PublicClientApplication } from "@azure/msal-browser";
-import { MsalProvider, useIsAuthenticated } from "@azure/msal-react";
+import { MsalProvider } from "@azure/msal-react";
 import "../styles/globals.css";
 
 const msalConfig = {
@@ -18,8 +18,6 @@ const msalConfig = {
 const msalPCA = new PublicClientApplication(msalConfig);
 
 function MyApp({ Component, pageProps }) {
-  const isAuthenticated = useIsAuthenticated();
-
   return (
     <MsalProvider instance={msalPCA}>
       <Component {...pageProps} />

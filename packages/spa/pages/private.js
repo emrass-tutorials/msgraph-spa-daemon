@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { useAccount, useIsAuthenticated, useMsal } from "@azure/msal-react";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
 
 export default function Private() {

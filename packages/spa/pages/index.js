@@ -1,13 +1,10 @@
 import { useIsAuthenticated, useMsal } from "@azure/msal-react";
-import Head from "next/head";
 import Layout from "../components/Layout";
-import LoginButton from "../components/LoginButton";
-import LogoutButton from "../components/LogoutButton";
 import styles from "../styles/Home.module.css";
-import { useRedirectIfSignedOut } from "../utils/authHooks";
+import { useRedirectIfSignedIn } from "../utils/authHooks";
 
 export default function Home() {
-  useRedirectIfSignedOut("/profile");
+  useRedirectIfSignedIn("/profile");
 
   const pageTitle =
     "Example of MS Graph API Usage with an Integrated SPA and Daemon Setup";

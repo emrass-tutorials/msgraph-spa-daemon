@@ -1,25 +1,25 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useIsAuthenticated } from "@azure/msal-react";
+import { useMsal } from "@azure/msal-react";
 
 export function useRedirectIfSignedIn(targetPath) {
   const router = useRouter();
-  const isAuthenticated = useIsAuthenticated();
+  const { accounts, inProgress } = useMsal();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (inProgress === "none" && accounts.length >= 1) {
       router.push(targetPath);
     }
-  }, [isAuthenticated]);
+  }, [inProgress, accounts]);
 }
 
 export function useRedirectIfSignedOut(targetPath) {
   const router = useRouter();
-  const isAuthenticated = useIsAuthenticated();
+  const { accounts, inProgress } = useMsal();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (inProgress === "none" && accounts.length <= 0) {
       router.push(targetPath);
     }
-  }, [isAuthenticated]);
+  }, [inProgress, accounts]);
 }

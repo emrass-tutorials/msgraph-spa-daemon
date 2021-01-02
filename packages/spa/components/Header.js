@@ -23,7 +23,9 @@ const Header = () => {
         </Link>
         <UnauthenticatedTemplate>
           {" | "}
-          <LoginButton />
+          <Link href="/auth/signin">
+            <a>Sign In</a>
+          </Link>
         </UnauthenticatedTemplate>
         <AuthenticatedTemplate>
           {" | "}
