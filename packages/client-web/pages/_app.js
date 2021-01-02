@@ -6,6 +6,7 @@ const msalConfig = {
   auth: {
     clientId: process.env.NEXT_PUBLIC_AZURE_APP_ID,
     authority: process.env.NEXT_PUBLIC_AZURE_APP_AUTHORITY,
+    redirectUri: process.env.NEXT_PUBLIC_AZURE_REDIRECT_URI,
     postLogoutRedirectUri: process.env.NEXT_PUBLIC_POST_LOGOUT_REDIRECT_URI,
   },
   cache: {
