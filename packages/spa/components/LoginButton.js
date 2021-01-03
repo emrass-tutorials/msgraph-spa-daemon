@@ -3,7 +3,7 @@ import { useMsal } from "@azure/msal-react";
 const LoginButton = () => {
   const { instance, accounts, inProgress } = useMsal();
   const request = {
-    scopes: ["email", "offline_access", "openid", "profile", "User.Read"],
+    scopes: process.env.NEXT_PUBLIC_AZURE_APP_SCOPES?.split(","),
   };
 
   const buttonText =

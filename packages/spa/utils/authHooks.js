@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
-import { useMsal } from "@azure/msal-react";
+import { useAccount, useMsal } from "@azure/msal-react";
 
 export function useRedirectIfSignedIn(targetPath) {
   const router = useRouter();
@@ -22,4 +22,41 @@ export function useRedirectIfSignedOut(targetPath) {
       router.push(targetPath);
     }
   }, [inProgress, accounts]);
+}
+
+export function useAccessToken(scopes) {
+  const isMountedRef = useRef(false);
+  const [accessToken, setAccessToken] = useState(null);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { instance, accounts, inProgress } = useMsal();
+  const account = useAccount(accounts[0] || { homeAccountId: undefined });
+
+  if (!scopes) scopes = process.env.NEXT_PUBLIC_AZURE_APP_SCOPES?.split(",");
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    (async () => {
+      try {
+        if (account) {
+          const response = await instance.acquireTokenSilent({
+            scopes,
+            account,
+          });
+          if (isMountedRef.current) setAccessToken(response.accessToken);
+        }
+      } catch (e) {
+        if (isMountedRef.current) setError(e);
+      } finally {
+        if (isMountedRef.current) setIsLoading(false);
+      }
+    })();
+
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, [account, instance]);
+
+  return { accessToken, error, isLoading };
 }

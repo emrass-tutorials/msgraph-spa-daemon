@@ -1,21 +1,30 @@
-import { useState, useMemo } from "react";
-import { useMsal } from "@azure/msal-react";
 import Layout from "../components/Layout";
-import { useRedirectIfSignedOut } from "../utils/authHooks";
+import { useAccessToken, useRedirectIfSignedOut } from "../utils/authHooks";
+import useGraph from "../utils/useGraph";
 
 const Profile = () => {
   useRedirectIfSignedOut("/auth/signin");
 
-  const { instance, accounts } = useMsal();
-  const account = useMemo(
-    () => instance.getAccountByHomeId(accounts[0]?.homeAccountId),
-    [accounts[0]]
+  const { accessToken, error, isLoading } = useAccessToken();
+  const { data: userProfile, error: fetchError, fetchIsLoading } = useGraph(
+    accessToken,
+    "https://graph.microsoft.com/v1.0/me"
   );
-  const [apiData, setApiData] = useState(null);
+
+  if (isLoading || fetchIsLoading || !userProfile) {
+    return (
+      <Layout>
+        <span>Loading ...</span>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      <span>There are currently {accounts.length} users signed in!</span>
+      <h1>{userProfile.displayName}</h1>
+      <p>Email: {userProfile.mail}</p>
+      <p>Job Title: {userProfile.jobTitle}</p>
+      <p>Phone(s): {userProfile.businessPhones.join(", ")}</p>
     </Layout>
   );
 };
