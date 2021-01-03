@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import { useAccount, useMsal } from "@azure/msal-react";
 
@@ -24,14 +24,15 @@ export function useRedirectIfSignedOut(targetPath) {
   }, [inProgress, accounts]);
 }
 
-export function useAccessToken(scopes) {
+export function useAuthToken(scopes) {
   const isMountedRef = useRef(false);
   const [accessToken, setAccessToken] = useState(null);
+  const [idToken, setIdToken] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const { instance, accounts, inProgress } = useMsal();
-  const account = useAccount(accounts[0] || { homeAccountId: undefined });
+  const account = accounts[0]; // useAccount(accounts[0] || { homeAccountId: undefined });
 
   if (!scopes) scopes = process.env.NEXT_PUBLIC_AZURE_APP_SCOPES?.split(",");
 
@@ -44,7 +45,10 @@ export function useAccessToken(scopes) {
             scopes,
             account,
           });
-          if (isMountedRef.current) setAccessToken(response.accessToken);
+          if (isMountedRef.current) {
+            setAccessToken(response.accessToken);
+            setIdToken(response.idToken);
+          }
         }
       } catch (e) {
         if (isMountedRef.current) setError(e);
@@ -58,5 +62,5 @@ export function useAccessToken(scopes) {
     };
   }, [account, instance]);
 
-  return { accessToken, error, isLoading };
+  return { accessToken, idToken, error, isLoading };
 }

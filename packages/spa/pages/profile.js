@@ -1,11 +1,11 @@
 import Layout from "../components/Layout";
-import { useAccessToken, useRedirectIfSignedOut } from "../utils/authHooks";
+import { useAuthToken, useRedirectIfSignedOut } from "../utils/authHooks";
 import useGraph from "../utils/useGraph";
 
 const Profile = () => {
   useRedirectIfSignedOut("/auth/signin");
 
-  const { accessToken, error, isLoading } = useAccessToken();
+  const { accessToken, error, isLoading } = useAuthToken();
   const { data: userProfile, error: fetchError, fetchIsLoading } = useGraph(
     accessToken,
     "https://graph.microsoft.com/v1.0/me"
