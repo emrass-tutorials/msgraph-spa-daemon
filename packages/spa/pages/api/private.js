@@ -1,3 +1,5 @@
+import { createUser, getAllTenants } from "../../lib/db-admin";
+
 const jwt = require("jsonwebtoken");
 const jwksClient = require("jwks-rsa");
 
@@ -6,11 +8,9 @@ const checkJWT = (handler) => async (req, res) => {
   if (!req.headers?.authorization) {
     return res.status(401).end("Authorization header missing");
   }
-  // TODO: Read from database
-  const supportedTenants = [
-    "ca8bce68-a4e3-46df-afd2-937ad91a068c", // azureadoidcdemo
-    "9e47a3c9-2733-460e-8818-aac0fb5d4040", // emrasssandbox
-  ];
+
+  const supportedTenants = await getAllTenants();
+  console.log("DB Tenants: ", supportedTenants);
 
   const auth = req.headers.authorization;
   const token = auth.split(" ")[1];
@@ -18,7 +18,7 @@ const checkJWT = (handler) => async (req, res) => {
   const validationOptions = {
     audience: process.env.NEXT_PUBLIC_AZURE_APP_ID,
     issuer: supportedTenants.map(
-      (t) => `https://login.microsoftonline.com/${t}/v2.0`
+      (t) => `https://login.microsoftonline.com/${t.uid}/v2.0`
     ),
   };
 
@@ -35,6 +35,15 @@ const checkJWT = (handler) => async (req, res) => {
         return res.status(403).end("Forbidden");
       }
     }
+
+    // createUser(`${payload.oid}.${payload.tid}`, {
+    //   id: payload.oid,
+    //   tenantId: payload.tid,
+    //   name: payload.name,
+    //   email: payload.email,
+    //   givenName: payload.given_name,
+    //   familyName: payload.family_name,
+    // });
 
     // The JWT token content is available in payload parameter
     handler(req, res);
