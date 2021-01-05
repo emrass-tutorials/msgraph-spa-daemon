@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const msal = require("@azure/msal-node");
 const { getAllConsentedTenants } = require("./lib/db-admin");
-const graph = require("./graph-client.js");
+const graph = require("./lib/graph-client.js");
 
 async function dumpUsers() {
   const clientCredentialRequest = {
