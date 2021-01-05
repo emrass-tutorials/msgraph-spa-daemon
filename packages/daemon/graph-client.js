@@ -1,5 +1,5 @@
-const graph = require("@microsoft/microsoft-graph-client");
 require("isomorphic-fetch");
+const graph = require("@microsoft/microsoft-graph-client");
 
 module.exports = {
   getUsers: async function (accessToken) {

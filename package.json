@@ -7,8 +7,7 @@
   ],
   "scripts": {
     "spa": "yarn workspace @msgraph-spa-daemon/spa dev",
-    "daemon": "yarn workspace @msgraph-spa-daemon/daemon start",
-    "start": "concurrently --kill-others-on-fail \"yarn daemon\" \"yarn spa\""
+    "daemon": "yarn workspace @msgraph-spa-daemon/daemon execute"
   },
   "license": "MIT",
   "dependencies": {
