@@ -7,7 +7,7 @@ module.exports = {
 
     const users = await client.api("/users").get();
 
-    return users;
+    return users.value;
   },
 
   getUserDetails: async function (accessToken, userId) {
@@ -26,14 +26,16 @@ module.exports = {
     const client = getAuthenticatedClient(accessToken);
 
     const events = await client
-      .api(`/users/${userId}/calendarview"`)
-      // Add the begin and end of the calendar window
-      .query({ startDateTime: start, endDateTime: end })
-      // Order by start time
+      .api(`/users/${userId}/calendarview`)
+      .query({
+        startDateTime: start,
+        endDateTime: end,
+      })
+      .filter("categories/any(c:c eq 'AB')")
       .orderby("start/dateTime")
       .get();
 
-    return events;
+    return events.value.length;
   },
 };
 

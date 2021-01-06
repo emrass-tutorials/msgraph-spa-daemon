@@ -35,15 +35,24 @@ async function dumpUsers() {
     }
 
     let users;
+    const calendarEvents = {};
     try {
       users = await graph.getUsers(accessToken);
+      for (let i = 0; i < users.length; i++) {
+        calendarEvents[users[i].id] = await graph.getCalendarView(
+          accessToken,
+          users[i].id,
+          "2020-12-01T00:00:00",
+          "2021-02-01T00:00:00"
+        );
+      }
     } catch (err) {
       console.error(tenant.id, err);
       return;
     }
 
-    console.log("Dumping users for ", tenant.id);
-    console.log(users);
+    console.log("Dumping calendar events for ", tenant.id);
+    console.log(calendarEvents);
   });
 }
 
