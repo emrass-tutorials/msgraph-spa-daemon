@@ -35,7 +35,7 @@ module.exports = {
       .orderby("start/dateTime")
       .get();
 
-    return events.value.length;
+    return events.value;
   },
 };
 
