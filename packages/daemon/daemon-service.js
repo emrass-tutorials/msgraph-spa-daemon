@@ -16,8 +16,13 @@ async function dumpUsers() {
     const msalConfig = {
       auth: {
         clientId: process.env.OAUTH_APP_ID,
-        clientSecret: process.env.OAUTH_APP_SECRET,
-        authority: `https://login.microsoftonline.com/${tenant.id}`,
+        // clientSecret: process.env.OAUTH_APP_SECRET,
+        clientCertificate: {
+          thumbprint: process.env.OAUTH_APP_CERT_THUMBPRINT,
+          privateKey: process.env.OAUTH_APP_CERT_PRIVATE_KEY,
+        },
+        // trailing "/" is important when using certificates! - see https://sebastian-rogers.medium.com/could-not-resolve-endpoints-3f66bd9dc9
+        authority: `https://login.microsoftonline.com/${tenant.id}/`,
         redirectUri: process.env.OAUTH_APP_REDIRECT_URI,
       },
     };
