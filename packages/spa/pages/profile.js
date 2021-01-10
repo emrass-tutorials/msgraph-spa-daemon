@@ -7,7 +7,6 @@ const Profile = () => {
   useRedirectIfSignedOut("/auth/signin");
 
   const { accessToken, idToken, error, isLoading } = useAuthToken();
-  console.log(idToken);
   const { accounts } = useMsal();
   const { data: userProfile, error: fetchError, fetchIsLoading } = useGraph(
     accessToken,
