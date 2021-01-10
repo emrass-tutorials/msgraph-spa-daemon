@@ -27,8 +27,10 @@ yarn spa
 Run the following command to generate a self-signed certificate:
 
 ```
-openssl req -x509 -newkey rsa:4096 -keyout msgraph-daemon-key.pem -out msgraph-daemon-cert.pem -days 999 -nodes
+openssl req -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 999 -nodes -subj "/C=US/ST=CA/L=Sunnyvale/O=Org/OU=root/CN=msgraph-spa-daemon/emailAddress=support@example.com"
 ```
+
+Note that we cannot use `rsa:4096` because the size of environment variables is limited to 4kb in AWS, and we need to be able to set the private key in an env variable.
 
 Note the `-nodes` (no DES) at the end, which will generate an unencrypted private key.
 
